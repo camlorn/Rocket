@@ -16,6 +16,7 @@ pub struct ConfigBuilder {
     pub workers: u16,
     /// Keep-alive timeout in seconds or disabled if 0.
     pub keep_alive: u32,
+    pub read_timeout: u32,
     /// How much information to log.
     pub log_level: LoggingLevel,
     /// The secret key.
@@ -57,6 +58,7 @@ impl ConfigBuilder {
             port: config.port,
             workers: config.workers,
             keep_alive: config.keep_alive.unwrap_or(0),
+            read_timeout: config.read_timeout.unwrap_or(0),
             log_level: config.log_level,
             secret_key: None,
             tls: None,
@@ -145,6 +147,12 @@ impl ConfigBuilder {
     #[inline]
     pub fn keep_alive(mut self, timeout: u32) -> Self {
         self.keep_alive = timeout;
+        self
+    }
+
+    #[inline]
+    pub fn read_timeout(mut self, timeout: u32) -> Self {
+        self.read_timeout = timeout;
         self
     }
 
@@ -318,6 +326,7 @@ impl ConfigBuilder {
         config.set_port(self.port);
         config.set_workers(self.workers);
         config.set_keep_alive(self.keep_alive);
+        config.set_read_timeout(self.read_timeout);
         config.set_log_level(self.log_level);
         config.set_extras(self.extras);
         config.set_limits(self.limits);

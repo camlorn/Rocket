@@ -579,6 +579,7 @@ mod test {
             workers = 21
             log = "critical"
             keep_alive = 0
+            read_timeout = 0
             secret_key = "8Xui8SN4mI+7egV/9dlfYYLGQJeEx4+DwmSQLwDVXJg="
             template_dir = "mine"
             json = true
@@ -591,6 +592,7 @@ mod test {
             .workers(21)
             .log_level(LoggingLevel::Critical)
             .keep_alive(0)
+            .read_timeout(0)
             .secret_key("8Xui8SN4mI+7egV/9dlfYYLGQJeEx4+DwmSQLwDVXJg=")
             .extra("template_dir", "mine")
             .extra("json", true)
