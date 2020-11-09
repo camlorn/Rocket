@@ -48,6 +48,7 @@ pub struct Config {
     pub keep_alive: Option<u32>,
     /// The read timeout.
     pub read_timeout: Option<u32>,
+    pub write_timeout: Option<u32>,
     /// How much information to log.
     pub log_level: LoggingLevel,
     /// The secret key.
@@ -232,6 +233,7 @@ impl Config {
                     workers: default_workers,
                     keep_alive: Some(5),
                     read_timeout: Some(5),
+                    write_timeout: Some(5),
                     log_level: LoggingLevel::Normal,
                     secret_key: key,
                     tls: None,
@@ -249,6 +251,7 @@ impl Config {
                     workers: default_workers,
                     keep_alive: Some(5),
                     read_timeout: Some(5),
+                    write_timeout: Some(5),
                     log_level: LoggingLevel::Normal,
                     secret_key: key,
                     tls: None,
@@ -266,6 +269,7 @@ impl Config {
                     workers: default_workers,
                     keep_alive: Some(5),
                     read_timeout: Some(5),
+                    write_timeout: Some(5),
                     log_level: LoggingLevel::Critical,
                     secret_key: key,
                     tls: None,
@@ -313,6 +317,7 @@ impl Config {
             workers => (u16, set_workers, ok),
             keep_alive => (u32, set_keep_alive, ok),
             read_timeout => (u32, set_read_timeout, ok),
+            write_timeout => (u32, set_write_timeout, ok),
             log => (log_level, set_log_level, ok),
             secret_key => (str, set_secret_key, id),
             tls => (tls_config, set_raw_tls, id),
@@ -429,6 +434,14 @@ impl Config {
     }
 
     pub fn set_read_timeout(&mut self, timeout: u32) {
+        if timeout == 0 {
+            self.read_timeout = None;
+        } else {
+            self.read_timeout = Some(timeout);
+        }
+    }
+
+    pub fn set_write_timeout(&mut self, timeout: u32) {
         if timeout == 0 {
             self.read_timeout = None;
         } else {
@@ -955,6 +968,7 @@ impl PartialEq for Config {
             && self.log_level == other.log_level
             && self.keep_alive == other.keep_alive
             && self.read_timeout == other.read_timeout
+            && self.write_timeout == other.write_timeout
             && self.environment == other.environment
             && self.extras == other.extras
     }
